@@ -1,4 +1,4 @@
-from operations import add_book, add_member, issue_book, return_book, view_books, view_members
+from OPERATIONS import add_book, add_member, issue_book, return_book, view_books, view_members
 
 def menu():
     while True:

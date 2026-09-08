@@ -79,4 +79,6 @@ class InternetArchiveProvider:
 
     @staticmethod
     def _lucene_phrase(query: str) -> str:
-        return re.sub(r'["\\]', "", query.strip())[:160]
+        special_chars = r'+-&|!(){}[]^"~*?:\\/'
+        escaped = re.sub(f"([{re.escape(special_chars)}])", r"\\\1", query.strip())
+        return escaped[:160]

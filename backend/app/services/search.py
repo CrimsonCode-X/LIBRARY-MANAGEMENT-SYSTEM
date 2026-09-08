@@ -37,8 +37,6 @@ class SearchService:
 
         title = normalize_text(book.title)
         authors = [normalize_text(author) for author in book.authors]
-        subjects = [normalize_text(subject) for subject in book.subjects]
-        description = normalize_text(book.description)
         terms = [term for term in re.findall(r"[a-z0-9]+", query.lower()) if term]
 
         score = 0
@@ -49,10 +47,11 @@ class SearchService:
 
         matched_title_terms = sum(1 for term in terms if term in title)
         score += matched_title_terms * 20
+
         score += sum(1 for author in authors if query_clean in author) * 45
         score += sum(1 for term in terms if any(term in author for author in authors)) * 10
-        score += sum(1 for term in terms if any(term in subject for subject in subjects)) * 3
-        if any(term in description for term in terms):
-            score += 1
 
+        # Subjects/descriptions are intentionally not sufficient to make a result
+        # relevant: a book mentioning "Harry Potter" in its metadata should not
+        # outrank an actual Harry Potter title.
         return score
